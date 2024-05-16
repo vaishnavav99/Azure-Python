@@ -29,8 +29,21 @@ def reset_password(resource_group_name, vm_name, new_password):
                 extension_parameters=VirtualMachineExtension(
                     location=vm.location,
                     protected_settings={'username':  vm.os_profile.admin_username, 'password': new_password}))
-        else:
+        elif (vm.storage_profile.os_disk.os_type).lower=='windows':
             print('Windows')
+            response = compute_client.virtual_machine_extensions.begin_create_or_update(
+            resource_group_name=resource_group_name, 
+            vm_name=vm_name, 
+            vm_extension_name='enablevmaccess', 
+            extension_parameters=VirtualMachineExtension(
+                location=vm.location, 
+                publisher='Microsoft.Compute',
+                type_properties_type='VMAccessAgent', 
+                type_handler_version='2.4', 
+                protected_settings={'password': new_password}, 
+                settings={'userName': vm.os_profile.admin_username}))
+        else:
+            print('unhandled')
     except Exception as e:
         print(f"An error occurred: {e}")
 # Call the function to reset the password
