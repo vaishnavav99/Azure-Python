@@ -47,4 +47,4 @@ def reset_password(resource_group_name, vm_name, new_password):
     except Exception as e:
         print(f"An error occurred: {e}")
 # Call the function to reset the password
-          reset_password('resource-grp', 'vm name', 'pwd')
+reset_password('resource-grp', 'vm name', 'pwd')
